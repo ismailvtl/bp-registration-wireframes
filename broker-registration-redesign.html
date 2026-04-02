@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Broker Portal — Registration</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --brand:#4e232a;
+  --brand-mid:#2D5C42;
+  --brand-light:#3D7A58;
+  --gold:#C4973A;
+  --gold-light:#E8C06A;
+  --gold-pale:#FDF6E8;
+  --surface:#FFFFFF;
+  --surface-2:#F8F7F4;
+  --surface-3:#F0EEE9;
+  --border:#E2DDD5;
+  --border-strong:#C8C2B8;
+  --text-primary:#1A1816;
+  --text-secondary:#6B6560;
+  --text-muted:#9C9490;
+  --text-on-brand:#FFFFFF;
+  --success:#1D6B3E;
+  --success-bg:#E8F5EE;
+  --warning:#B8750A;
+  --warning-bg:#FEF6E4;
+  --error:#B52B2B;
+  --error-bg:#FDEDED;
+  --info:#1A5BA8;
+  --info-bg:#EBF2FD;
+  --radius-sm:6px;
+  --radius-md:10px;
+  --radius-lg:16px;
+  --radius-xl:24px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.08),0 2px 4px rgba(0,0,0,0.04);
+  --shadow-lg:0 16px 40px rgba(0,0,0,0.12);
+  --font:'DM Sans',sans-serif;
+  --font-serif:'DM Serif Display',serif;
+}
+
+body{
+  font-family:var(--font);
+  background:var(--surface-2);
+  color:var(--text-primary);
+  min-height:100vh;
+  font-size:15px;
+  line-height:1.6;
+}
+
+/* Layout */
+.layout{display:flex;min-height:100vh}
+
+.sidebar{
+  width:300px;
+  min-width:300px;
+  background:var(--brand);
+  color:#fff;
+  padding:40px 32px;
+  display:flex;
+  flex-direction:column;
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow:hidden;
+}
+
+.sidebar-logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:48px;
+}
+
+.logo-mark{
+  width:40px;height:40px;
+  background:var(--gold);
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:600;color:var(--brand);
+  font-family:var(--font-serif);
+}
+
+.logo-text{font-size:16px;font-weight:500;letter-spacing:0.01em}
+.logo-sub{font-size:12px;color:rgba(255,255,255,0.5);margin-top:2px}
+
+.sidebar-heading{
+  font-size:11px;
+  font-weight:500;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.4);
+  margin-bottom:20px;
+}
+
+.steps{display:flex;flex-direction:column;gap:4px;flex:1}
+
+.step-item{
+  display:flex;
+  align-items:flex-start;
+  gap:14px;
+  padding:12px 14px;
+  border-radius:var(--radius-md);
+  cursor:pointer;
+  transition:background 0.15s;
+  position:relative;
+}
+.step-item:hover{background:rgba(255,255,255,0.06)}
+.step-item.active{background:rgba(255,255,255,0.1)}
+.step-item.completed .step-num{background:var(--gold);color:var(--brand)}
+.step-item.completed .step-title{color:rgba(255,255,255,0.7)}
+
+.step-num{
+  width:28px;height:28px;min-width:28px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.12);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:600;
+  margin-top:1px;
+  transition:background 0.2s,color 0.2s;
+}
+.step-item.active .step-num{background:var(--gold);color:var(--brand)}
+
+.step-content{}
+.step-title{font-size:14px;font-weight:500;color:#fff;margin-bottom:2px}
+.step-desc{font-size:12px;color:rgba(255,255,255,0.45);line-height:1.4}
+
+.step-connector{
+  width:1px;height:20px;
+  background:rgba(255,255,255,0.12);
+  margin-left:27px;
+}
+
+.sidebar-footer{
+  border-top:1px solid rgba(255,255,255,0.1);
+  padding-top:24px;
+  font-size:12px;
+  color:rgba(255,255,255,0.4);
+}
+
+/* Main area */
+.main{
+  flex:1;
+  padding:48px 64px;
+  max-width:780px;
+}
+
+.step-panel{display:none}
+.step-panel.active{display:block}
+
+/* Header */
+.panel-header{margin-bottom:40px}
+.step-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--gold-pale);
+  color:var(--warning);
+  font-size:11px;font-weight:600;
+  letter-spacing:0.08em;text-transform:uppercase;
+  padding:4px 12px;border-radius:100px;
+  margin-bottom:16px;
+}
+.panel-title{font-family:var(--font-serif);font-size:32px;font-weight:400;line-height:1.2;color:var(--brand);margin-bottom:8px}
+.panel-subtitle{font-size:14px;color:var(--text-secondary);line-height:1.5;max-width:520px}
+
+/* Form */
+.form-grid{display:grid;gap:24px}
+.form-grid-2{grid-template-columns:1fr 1fr;gap:20px 24px}
+.form-grid-3{grid-template-columns:1fr 1fr 1fr;gap:20px 16px}
+
+.field{display:flex;flex-direction:column;gap:6px}
+.field-full{grid-column:1/-1}
+
+label{font-size:13px;font-weight:500;color:var(--text-secondary)}
+label .req{color:var(--gold);margin-left:2px}
+label .optional{font-size:11px;font-weight:400;color:var(--text-muted);margin-left:6px}
+
+input[type=text],input[type=email],input[type=password],input[type=date],select,textarea{
+  width:100%;
+  height:44px;
+  padding:0 14px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  font-family:var(--font);
+  font-size:14px;
+  color:var(--text-primary);
+  transition:border-color 0.15s,box-shadow 0.15s;
+  outline:none;
+  appearance:none;
+}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--brand-light);
+  box-shadow:0 0 0 3px rgba(61,122,88,0.1);
+}
+input::placeholder{color:var(--text-muted)}
+select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' stroke='%239C9490' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 14px center;
+  padding-right:36px;
+}
+
+/* Prefilled state */
+input.prefilled{
+  background:var(--success-bg);
+  border-color:#A0D4B5;
+  color:var(--success);
+}
+
+/* Flagged (low confidence) */
+input.flagged{
+  background:var(--warning-bg);
+  border-color:#E8C06A;
+}
+
+.field-hint{font-size:12px;color:var(--text-muted)}
+.field-prefill-tag{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:11px;font-weight:500;color:var(--success);
+  margin-top:2px;
+}
+.field-flag-tag{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:11px;font-weight:500;color:var(--warning);
+  margin-top:2px;
+}
+
+/* Password strength */
+.pw-strength{display:flex;gap:4px;margin-top:8px}
+.pw-bar{height:3px;flex:1;border-radius:2px;background:var(--border);transition:background 0.2s}
+.pw-bar.weak{background:var(--error)}
+.pw-bar.medium{background:var(--warning)}
+.pw-bar.strong{background:var(--success)}
+.pw-label{font-size:11px;color:var(--text-muted);margin-top:4px}
+
+/* Checkbox group */
+.checkbox-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:10px;
+}
+.checkbox-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  cursor:pointer;
+  transition:border-color 0.15s,background 0.15s;
+  user-select:none;
+}
+.checkbox-item:hover{border-color:var(--border-strong);background:var(--surface-2)}
+.checkbox-item.checked{border-color:var(--brand-light);background:rgba(61,122,88,0.04)}
+.checkbox-item input[type=checkbox]{
+  width:16px;height:16px;
+  border:1.5px solid var(--border-strong);
+  border-radius:4px;background:var(--surface);
+  cursor:pointer;accent-color:var(--brand-light);
+  flex-shrink:0;
+}
+.checkbox-item span{font-size:13px;font-weight:500;color:var(--text-primary)}
+
+/* Upload zones */
+.upload-section{margin-bottom:32px}
+.upload-section-title{font-size:13px;font-weight:600;color:var(--text-secondary);letter-spacing:0.04em;text-transform:uppercase;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+
+.upload-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+.upload-zone{
+  border:1.5px dashed var(--border-strong);
+  border-radius:var(--radius-lg);
+  padding:20px 16px;
+  text-align:center;
+  cursor:pointer;
+  transition:border-color 0.15s,background 0.15s;
+  position:relative;
+  background:var(--surface);
+}
+.upload-zone:hover{border-color:var(--brand-light);background:rgba(61,122,88,0.02)}
+.upload-zone.has-file{border-style:solid;border-color:#A0D4B5;background:var(--success-bg)}
+.upload-zone.required-doc .badge{background:var(--gold-pale);color:var(--warning);font-size:10px;font-weight:600;padding:2px 8px;border-radius:100px;display:inline-block;margin-bottom:8px;letter-spacing:0.05em;text-transform:uppercase}
+
+.upload-icon{
+  width:36px;height:36px;
+  background:var(--surface-3);
+  border-radius:var(--radius-md);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 8px;
+  font-size:16px;
+}
+.upload-zone.has-file .upload-icon{background:rgba(29,107,62,0.12)}
+
+.upload-doc-name{font-size:13px;font-weight:500;color:var(--text-primary);margin-bottom:4px}
+.upload-hint{font-size:11px;color:var(--text-muted)}
+.upload-zone.has-file .upload-hint{color:var(--success);font-weight:500}
+
+.upload-prefill-note{
+  font-size:11px;
+  color:var(--info);
+  background:var(--info-bg);
+  padding:4px 10px;
+  border-radius:var(--radius-sm);
+  margin-top:8px;
+  display:inline-block;
+}
+
+/* OCR Banner */
+.ocr-banner{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:16px 20px;
+  background:var(--info-bg);
+  border:1px solid #BDD6F5;
+  border-radius:var(--radius-lg);
+  margin-bottom:28px;
+}
+.ocr-icon{font-size:20px;margin-top:1px}
+.ocr-text h4{font-size:13px;font-weight:600;color:var(--info);margin-bottom:3px}
+.ocr-text p{font-size:12px;color:#3A6EA0;line-height:1.5}
+
+/* Section divider */
+.section-divider{
+  display:flex;align-items:center;gap:12px;
+  margin:32px 0 20px;
+}
+.section-divider span{font-size:12px;font-weight:600;color:var(--text-muted);letter-spacing:0.07em;text-transform:uppercase;white-space:nowrap}
+.section-divider::before,.section-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* Group card */
+.group-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:24px;
+  margin-bottom:20px;
+}
+.group-card-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;
+  cursor:pointer;
+}
+.group-card-title{font-size:14px;font-weight:600;color:var(--text-primary)}
+.group-card-status{font-size:12px;color:var(--text-muted)}
+.group-card-status.done{color:var(--success);font-weight:500}
+
+/* Buttons */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:0 24px;
+  height:46px;
+  border-radius:var(--radius-md);
+  font-family:var(--font);
+  font-size:14px;font-weight:500;
+  cursor:pointer;
+  border:none;
+  transition:all 0.15s;
+}
+.btn-primary{
+  background:var(--brand);
+  color:#fff;
+}
+.btn-primary:hover{background:var(--brand-mid)}
+.btn-secondary{
+  background:transparent;
+  border:1px solid var(--border-strong);
+  color:var(--text-secondary);
+}
+.btn-secondary:hover{background:var(--surface-3);border-color:var(--border-strong)}
+
+.btn-gold{
+  background:var(--brand);
+  color:#FFF;
+  font-weight:600;
+}
+.btn-gold:hover{
+  background:#000;
+}
+
+.form-actions{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-top:32px;
+  border-top:1px solid var(--border);
+  margin-top:40px;
+}
+.form-actions-right{display:flex;gap:12px;align-items:center}
+
+/* Progress */
+.progress-bar{
+  height:3px;
+  background:var(--border);
+  border-radius:100px;
+  overflow:hidden;
+  margin-bottom:40px;
+}
+.progress-fill{
+  height:100%;
+  background:var(--gold);
+  border-radius:100px;
+  transition:width 0.4s ease;
+}
+
+/* Account status card */
+.status-card{
+  display:flex;align-items:center;gap:12px;
+  padding:14px 18px;
+  background:var(--warning-bg);
+  border:1px solid #E8C06A;
+  border-radius:var(--radius-md);
+  margin-bottom:28px;
+  font-size:13px;
+  color:var(--warning);
+}
+.status-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--gold);
+  flex-shrink:0;
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* Phone input */
+.phone-input{display:flex;gap:8px}
+.phone-input select{width:110px;min-width:110px}
+.phone-input input{flex:1}
+
+/* Tabs for personnel */
+.tabs{display:flex;gap:2px;padding:4px;background:var(--surface-3);border-radius:var(--radius-md);margin-bottom:24px;width:fit-content}
+.tab{
+  padding:7px 18px;
+  border-radius:var(--radius-sm);
+  font-size:13px;font-weight:500;
+  color:var(--text-secondary);
+  cursor:pointer;
+  transition:all 0.15s;
+}
+.tab.active{background:var(--surface);color:var(--text-primary);box-shadow:var(--shadow-sm)}
+
+/* Review summary */
+.review-section{margin-bottom:24px}
+.review-section-title{font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:12px}
+.review-row{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  padding:10px 0;
+  border-bottom:1px solid var(--border);
+  gap:16px;
+}
+.review-row:last-child{border-bottom:none}
+.review-label{font-size:13px;color:var(--text-secondary);min-width:200px}
+.review-value{font-size:13px;font-weight:500;color:var(--text-primary);text-align:right}
+
+.success-screen{
+  text-align:center;padding:60px 40px;
+}
+.success-icon{
+  width:72px;height:72px;
+  background:var(--success-bg);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;
+  margin:0 auto 24px;
+}
+.success-title{font-family:var(--font-serif);font-size:28px;color:var(--brand);margin-bottom:12px}
+.success-sub{font-size:14px;color:var(--text-secondary);max-width:400px;margin:0 auto 32px;line-height:1.6}
+
+/* Responsive */
+@media(max-width:900px){
+  .sidebar{display:none}
+  .main{padding:32px 24px}
+  .form-grid-2{grid-template-columns:1fr}
+  .form-grid-3{grid-template-columns:1fr 1fr}
+  .upload-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+   <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJoAAAA/CAMAAAAv8CF4AAADAFBMVEVMaXHw8PDOzs/o6Ojb29vm5ubr6+sKCwkPExXv7u/l5eWBgYPt7e3i4uJ2d3n+/v2Jiozj4+PR0dLW1tfq6uqXl5mDhIX5+fmEhYe+vb+lpqePrJl0dHZ7fH76+Pa7u7yMjI6qq6yhoqOPkJOTlZeOjpBqa2681tGRk5S4uLmuq6xgYGJUUlPHx8hvb3AoPSlmZ2mCs65OXkdycnSPiI1dW1vn5ud7e337/PqoqKvGybygnqIpKSiXl5OJfGw+Ozzy8/RPTE/FwsI0QDTb6+mysbFhaGirrayvqqivtbDn+v6cmpXf4eK+vb/39PSinJfm5uShmJimpKfPz8+SiYXD0s3V1dVraWlaV1mTj47w8PDh4+SeqKDc9eGKjI91cHB5f3mHjoJNaFKsop9DRlRSUFG+uLK+ubtkYGC9urrR08u8tbLi4OGSkY2Aj3/Dr6mOkInDvMG0s7OJfXbJxcezr7CTkZC0ysvVz86gpaG+x8Xz9vLDwL9NiqGooqQdJye5sqja3dm6vbmJuKubj6X07vFmZl2Klozp0dOqqKiIjpGtoJ3ArbSEg4CBfX3Gycx3aHnSx8Xl1c+IgX5pnphgVlj7+PVhVlONdof0196knKWJysYtKDSJhIidjY3IwcHRy8y8w6erm5Xl5ufAopb3/PmmjJrl1tXo1s3eurlnZl9GSD9gYGXg2tlqn3CzoIrUscPx8eyabmbz7vvKvsGI1MZiVGJQWWMgPB3s4N7f5OGCenybmK9WTlebin+8ydB2cW7c2tqjgoGap4ZBNzOOqbidl6e7k7FmbLvuycxIPWV4RXeYtsvg4OD////y8/PY2Nnd3d3U1NSIiYqampuGhojLy8vf3t/7/Px5eXz09fWdnZ7BwsN+f4HFxMWxsbLJyMm1tbf39/dPTEuZlI+ura9LRkeTjYmAenc6NDJsZGNFQkCPh4T+9/rl398sJiMyLSyKhX776/C5uLGwp6R8cW4bFxTt4OqFgH315evf19i6s8LYz86wmYy3prHt5vMgR1Y3AAAA/3RSTlMA/v7+/v7+AgH+/v7+/v7+/v7+/v7+/v7+/v4G/v1j/v7+/v7+/v4K/v4o/v3+/hD+Egv+KP70zWj8GHAa0hf+MN11LBzSKYbLc8eZKPJG+6Dh3fXOSvSr3Hjw80Wc/ut9y0vlc9zVxbxbXeX0vjL9lv32/fLo7aLavcehPR6gOZ1ptF66mmI+/O1Y9/SqtozJ/J+VgouB/nX+yi+G6veftZ+fyPnG+4q5/fG34dJn4vey/v3cePrgWONy6fqh+/iP4vjG5KDz9j3o68H2/////v////////////////////////////7//////v////////////////////////5f8ye4AAAACXBIWXMAAAsTAAALEwEAmpwYAAARx0lEQVR4nO2Zd1QbWZaHnyqolHMWsiIgASIaY8AGFjDYDU7Ybo/bOYxjO+fYzjm27c4557id40xP3F3liLIIxiQbx7Y7zO4pIWEkBHh2e/+be46qpKp69336vfvuCwV0D04zj3oIt1GjRs2ePSpmsx8e9fAfti178b016QCQSGBQk/4RemjU7IdjduVM4gMX1m5+eNOmadOmTXswZtOmTds0caJuw4bNDWPPnl9Qkw9Akhre7mS7UB6NTDD1N4+nqalJ6BaaaP/95Nr97+UDgA3KtqvDLMTLEEwEgocyNj2xkvyFj8uNHk+Tx+PxmPAD7hv3HjGhm+j6+bXlnyepQfqpuYlGpuFGppEHWpPbbbp7cuYYQBoEjpT3JpnGixiRBxuLEqvASNhfyptQCkqhsOlsNt1gMOAfg8sQNTpsMhp/3LIIYIl/6gWOiYhbL12CEQhkAo0sZHb/4+2c5MJh4CyTwCMSiSb8CDeZFyW2DQnUSlwwBUUpFAo7anTcDJFPhNZCNF7fMUC4uRAhgmbCFWYymUx331noIfQSEj1M0+XPATYQjgQeQZt4RNjU5EOMPJjHNm4Z+FQp14JrxmbTTCZPLGYIBAIeAmQe24ILaOYZF5MSYvoQRODxiDCT47VHjI8fvLhJghDPaGyKwPE8zNDbSeIBA4uNRCLP48ruamYweTyY5n5mwFMTAhaUwmbTCTqVCnfcWxFejd2rag0RTAaXy2BBjNMTSs6FCDAMuyWF17IvX7u28c61jZdxu3bnzq3mjsJCqtPIxBuaBjM//o8BjYqBJd0EmEckpNxYuee2wIjCdObanMSYmeBDUDabzeP7tW1tbS0tk1va2ia34OeWE10tXWlaD9FiMFhmG5fEB8NciAzDPJP2xqz6jJEZIzMyMuozeq1+0orXx81vb1YJhTwyjQx7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" alt="" />
+  </div>
+
+  <div class="sidebar-heading">Registration steps</div>
+
+  <div class="steps" id="sidebar-steps">
+    <div class="step-item active" data-step="1">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <div class="step-title">Account setup</div>
+        <div class="step-desc">Company name, email & password</div>
+      </div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step-item" data-step="2">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <div class="step-title">Upload documents</div>
+        <div class="step-desc">License, certificate & ID</div>
+      </div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step-item" data-step="3">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <div class="step-title">Company details</div>
+        <div class="step-desc">Auto-filled from your docs</div>
+      </div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step-item" data-step="4">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <div class="step-title">Personnel & bank</div>
+        <div class="step-desc">Signatory, admin & payment</div>
+      </div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step-item" data-step="5">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <div class="step-title">Review & submit</div>
+        <div class="step-desc">Confirm and send for approval</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    For any queries, please contact us at: agents@darglobal.co.uk
+  </div>
+</aside>
+
+<!-- Main -->
+<main class="main">
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="progress" style="width:20%"></div>
+  </div>
+
+  <!-- ============ STEP 1: Account Setup ============ -->
+  <div class="step-panel active" id="panel-1">
+    <div class="panel-header">
+      <div class="step-badge">Step 1 of 5</div>
+      <h1 class="panel-title">Create your account</h1>
+      <p class="panel-subtitle">Your account will be created immediately. The full profile review happens in later steps — no need to fill everything upfront.</p>
+    </div>
+
+    <div class="form-grid form-grid-2">
+      <div class="field field-full">
+        <label for="company-name">Company name <span class="req">*</span></label>
+        <input type="text" id="company-name" placeholder="e.g. Al Faisal Real Estate LLC"/>
+      </div>
+      <div class="field">
+        <label for="admin-email">Company / admin email <span class="req">*</span></label>
+        <input type="email" id="admin-email" placeholder="admin@yourcompany.com"/>
+      </div>
+      <div class="field">
+        <label for="trade-num">Trade license number <span class="req">*</span></label>
+        <input type="text" id="trade-num" placeholder="e.g. TL-2024-012345"/>
+      </div>
+      <div class="field">
+        <label for="password">Password <span class="req">*</span></label>
+        <input type="password" id="password" placeholder="Min 8 characters" oninput="updatePwStrength(this.value)"/>
+        <div class="pw-strength" id="pw-bars">
+          <div class="pw-bar" id="bar1"></div>
+          <div class="pw-bar" id="bar2"></div>
+          <div class="pw-bar" id="bar3"></div>
+          <div class="pw-bar" id="bar4"></div>
+        </div>
+        <div class="pw-label" id="pw-label">Enter a password</div>
+      </div>
+      <div class="field">
+        <label for="confirm-pw">Confirm password <span class="req">*</span></label>
+        <input type="password" id="confirm-pw" placeholder="Repeat password"/>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <span style="font-size:13px;color:var(--text-muted)">Already have an account? <a href="#" style="color:var(--brand-light)">Sign in</a></span>
+      <div class="form-actions-right">
+        <button class="btn btn-gold" onclick="goStep(2)">Create account →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ STEP 2: Upload Documents ============ -->
+  <div class="step-panel" id="panel-2">
+    <div class="panel-header">
+      <div class="step-badge">Step 2 of 5</div>
+      <h1 class="panel-title">Upload your documents</h1>
+      <p class="panel-subtitle">Upload your key documents first. We'll automatically extract details to pre-fill the form in the next step — saving you time.</p>
+    </div>
+
+    <div class="ocr-banner">
+      <div class="ocr-icon">✦</div>
+      <div class="ocr-text">
+        <h4>Smart auto-fill enabled</h4>
+        <p>Once you upload, our system will read your documents and pre-fill fields like license numbers, dates, and registered addresses. You'll still review everything before submitting.</p>
+      </div>
+    </div>
+
+    <div class="upload-section">
+      <div class="upload-section-title">Company documents</div>
+      <div class="upload-grid">
+
+        <div class="upload-zone required-doc" onclick="simulateUpload(this,'coi')">
+          <div class="badge">Required</div>
+          <div class="upload-icon">📄</div>
+          <div class="upload-doc-name">Certificate of Incorporation</div>
+          <div class="upload-hint">Pre-fills: city, country, license dates</div>
+          <div class="upload-prefill-note">Auto-fills 5 fields</div>
+        </div>
+
+        <div class="upload-zone required-doc" onclick="simulateUpload(this,'brok')">
+          <div class="badge">Required</div>
+          <div class="upload-icon">📋</div>
+          <div class="upload-doc-name">Brokerage Certificate</div>
+          <div class="upload-hint">Pre-fills: certificate number & dates</div>
+          <div class="upload-prefill-note">Auto-fills 3 fields</div>
+        </div>
+
+        <div class="upload-zone" onclick="simulateUpload(this,'vat')">
+          <div class="upload-icon">🧾</div>
+          <div class="upload-doc-name">VAT Certificate</div>
+          <div class="upload-hint">Pre-fills: tax registration number</div>
+          <div class="upload-prefill-note">Auto-fills 1 field</div>
+        </div>
+
+        <div class="upload-zone" onclick="simulateUpload(this,'bank')">
+          <div class="upload-icon">🏦</div>
+          <div class="upload-doc-name">Bank Confirmation Letter</div>
+          <div class="upload-hint">Pre-fills: all bank details</div>
+          <div class="upload-prefill-note">Auto-fills 7 fields</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="upload-section">
+      <div class="upload-section-title">Personnel documents</div>
+      <div class="upload-grid">
+        <div class="upload-zone required-doc" onclick="simulateUpload(this,'passport')">
+          <div class="badge">Required</div>
+          <div class="upload-icon">🪪</div>
+          <div class="upload-doc-name">Passport / National ID</div>
+          <div class="upload-hint">Pre-fills: signatory name, DOB, nationality</div>
+          <div class="upload-prefill-note">Auto-fills 6 fields</div>
+        </div>
+        <div class="upload-zone" onclick="simulateUpload(this,'eid')">
+          <div class="upload-icon">🪪</div>
+          <div class="upload-doc-name">Emirates ID</div>
+          <div class="upload-hint">Pre-fills: admin name, DOB</div>
+          <div class="upload-prefill-note">Auto-fills 3 fields</div>
+        </div>
+        <div class="upload-zone" onclick="simulateUpload(this,'brokerid')">
+          <div class="upload-icon">🏷️</div>
+          <div class="upload-doc-name">Broker ID Card</div>
+          <div class="upload-hint">Pre-fills: designation, prefix</div>
+          <div class="upload-prefill-note">Auto-fills 2 fields</div>
+        </div>
+        <div class="upload-zone" onclick="simulateUpload(this,'extra')">
+          <div class="upload-icon">➕</div>
+          <div class="upload-doc-name">Additional document</div>
+          <div class="upload-hint">Optional supporting document</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn btn-secondary" onclick="goStep(1)">← Back</button>
+      <div class="form-actions-right">
+        <span style="font-size:12px;color:var(--text-muted)">You can add more documents later</span>
+        <button class="btn btn-gold" onclick="goStep(3)">Continue → Auto-fill form</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ STEP 3: Company Details ============ -->
+  <div class="step-panel" id="panel-3">
+    <div class="panel-header">
+      <div class="step-badge">Step 3 of 5</div>
+      <h1 class="panel-title">Company details</h1>
+      <p class="panel-subtitle">Most fields below were auto-filled from your documents. Please review and correct anything that looks wrong.</p>
+    </div>
+
+    <div class="status-card">
+      <div class="status-dot"></div>
+      <span><strong>14 fields auto-filled</strong> from your documents · 3 fields flagged for review · 2 fields need manual input</span>
+    </div>
+
+    <div class="group-card">
+      <div class="form-grid form-grid-2">
+        <div class="field">
+          <label for="city-reg">City of Registration <span class="req">*</span></label>
+          <input type="text" id="city-reg" value="Dubai" class="prefilled"/>
+          <div class="field-prefill-tag">✓ From Certificate of Incorporation</div>
+        </div>
+        <div class="field">
+          <label for="country-reg">Country of Registration <span class="req">*</span></label>
+          <select id="country-reg" class="prefilled">
+            <option selected>United Arab Emirates</option>
+            <option>Saudi Arabia</option>
+            <option>Oman</option>
+            <option>Qatar</option>
+            <option>Kuwait</option>
+          </select>
+          <div class="field-prefill-tag">✓ From Certificate of Incorporation</div>
+        </div>
+        <div class="field">
+          <label for="licensed">Licensed / Non-licensed <span class="req">*</span></label>
+          <select id="licensed" class="prefilled">
+            <option selected>Real Estate Licensed</option>
+            <option>Non-Licensed</option>
+          </select>
+          <div class="field-prefill-tag">✓ From Certificate of Incorporation</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"><span>Trade license</span></div>
+    <div class="group-card">
+      <div class="form-grid form-grid-2">
+        <div class="field">
+          <label for="tl-issue">Trade License Issue Date <span class="req">*</span></label>
+          <input type="date" id="tl-issue" value="2026-03-31" class="prefilled"/>
+          <div class="field-prefill-tag">✓ From Certificate of Incorporation</div>
+        </div>
+        <div class="field">
+          <label for="tl-expiry">Trade License Expiry Date</label>
+          <input type="date" id="tl-expiry" value="2028-04-02" class="prefilled"/>
+          <div class="field-prefill-tag">✓ From Certificate of Incorporation</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"><span>Brokerage certificate</span></div>
+    <div class="group-card">
+      <div class="form-grid form-grid-2">
+        <div class="field">
+          <label for="bc-num">Brokerage Certificate Number <span class="req">*</span></label>
+          <input type="text" id="bc-num" value="131131" class="prefilled"/>
+          <div class="field-prefill-tag">✓ From Brokerage Certificate</div>
+        </div>
+        <div class="field">
+          <label for="bc-issue">Issue Date <span class="req">*</span></label>
+          <input type="date" id="bc-issue" value="2026-03-31" class="flagged"/>
+          <div class="field-flag-tag">⚠ Low confidence — please verify</div>
+        </div>
+        <div class="field">
+          <label for="bc-expiry">Expiry Date <span class="req">*</span></label>
+          <input type="date" id="bc-expiry" value="2028-04-01" class="prefilled"/>
+          <div class="field-prefill-tag">✓ From Brokerage Certificate</div>
+        </div>
+        <div class="field">
+          <label for="tax-num">Tax Registration Number <span class="req">*</span></label>
+          <input type="text" id="tax-num" value="131131" class="prefilled"/>
+          <div class="field-prefill-tag">✓ From VAT Certificate</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"><span>Project interests & assignment</span></div>
+    <div class="group-card">
+      <div class="field">
+        <label>Project Destinations Interested <span class="req">*</span></label>
+        <div class="checkbox-grid" style="margin-top:8px">
+          <label class="checkbox-item checked">
+            <input type="checkbox" checked/><span>Riyadh, KSA</span>
+          </label>
+          <label class="checkbox-item checked">
+            <input type="checkbox" checked/><span>Muscat, Oman</span>
+          </label>
+          <label class="checkbox-item checked">
+            <input type="checkbox" checked/><span>London, UK</span>
+          </label>
+          <label class="checkbox-item checked">
+            <input type="checkbox" checked/><span>Dubai, UAE</span>
+          </label>
+          <label class="checkbox-item checked">
+            <input type="checkbox" checked/><span>Marbella, Spain</span>
+          </label>
+          <label class="checkbox-item checked">
+            <input type="checkbox" checked/><span>Doha, Qatar</span>
+          </label>
+        </div>
+      </div>
+      <div style="margin-top:20px">
+        <div class="field">
+          <label for="sales-mgr">DarGlobal Sales Manager <span class="req">*</span></label>
+          <select id="sales-mgr">
+            <option value="">Select your assigned manager</option>
+            <option value="random" selected>Random (auto-assign)</option>
+          </select>
+          <div class="field-hint">If you don't know your manager, select "Random" and it will be assigned during review</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn btn-secondary" onclick="goStep(2)">← Back</button>
+      <div class="form-actions-right">
+        <button class="btn btn-gold" onclick="goStep(4)">Continue →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ STEP 4: Personnel & Bank ============ -->
+  <div class="step-panel" id="panel-4">
+    <div class="panel-header">
+      <div class="step-badge">Step 4 of 5</div>
+      <h1 class="panel-title">Personnel & bank details</h1>
+      <p class="panel-subtitle">Signatory and admin info has been pre-filled from your ID documents. Please review carefully.</p>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab(this,'auth')">Authorized Signatory</div>
+      <div class="tab" onclick="switchTab(this,'admin')">Admin / Office Manager</div>
+      <div class="tab" onclick="switchTab(this,'bank')">Bank Details</div>
+    </div>
+
+    <!-- Authorized Signatory -->
+    <div id="tab-auth">
+      <div class="group-card">
+        <div class="form-grid form-grid-2">
+          <div class="field">
+            <label>Prefix</label>
+            <select class="prefilled">
+              <option selected>Mr.</option><option>Ms.</option><option>Dr.</option>
+            </select>
+            <div class="field-prefill-tag">✓ From Passport</div>
+          </div>
+          <div class="field"></div>
+          <div class="field">
+            <label>First name <span class="req">*</span></label>
+            <input type="text" value="Mohammed" class="prefilled"/>
+            <div class="field-prefill-tag">✓ From Passport</div>
+          </div>
+          <div class="field">
+            <label>Last name <span class="req">*</span></label>
+            <input type="text" value="Al Rashidi" class="prefilled"/>
+            <div class="field-prefill-tag">✓ From Passport</div>
+          </div>
+          <div class="field">
+            <label>Designation <span class="req">*</span></label>
+            <input type="text" value="CEO" class="prefilled"/>
+            <div class="field-prefill-tag">✓ From Broker ID Card</div>
+          </div>
+          <div class="field">
+            <label>Mobile number <span class="req">*</span></label>
+            <div class="phone-input">
+              <select><option>🇦🇪 +971</option><option>🇸🇦 +966</option><option>🇬🇧 +44</option></select>
+              <input type="text" placeholder="50 123 4567"/>
+            </div>
+          </div>
+          <div class="field">
+            <label>Email <span class="req">*</span></label>
+            <input type="email" placeholder="signatory@company.com"/>
+          </div>
+          <div class="field">
+            <label>Nationality <span class="req">*</span></label>
+            <select class="prefilled">
+              <option selected>Emirati</option>
+              <option>Saudi</option>
+              <option>British</option>
+            </select>
+            <div class="field-prefill-tag">✓ From Passport</div>
+          </div>
+          <div class="field">
+            <label>Date of birth <span class="req">*</span></label>
+            <input type="date" value="1982-06-15" class="prefilled"/>
+            <div class="field-prefill-tag">✓ From Passport</div>
+          </div>
+          <div class="field">
+            <label>ID type <span class="req">*</span></label>
+            <select class="prefilled">
+              <option selected>Passport</option>
+              <option>National ID</option>
+            </select>
+            <div class="field-prefill-tag">✓ From Passport</div>
+          </div>
+          <div class="field">
+            <label>Passport / ID number <span class="req">*</span></label>
+            <input type="text" value="A12345678" class="prefilled"/>
+            <div class="field-prefill-tag">✓ From Passport</div>
+          </div>
+          <div class="field">
+            <label>ID issue date <span class="req">*</span></label>
+            <input type="date" value="2020-01-10" class="prefilled"/>
+            <div class="field-prefill-tag">✓ From Passport</div>
+          </div>
+          <div class="field">
+            <label>ID expiry date <span class="req">*</span></label>
+            <input type="date" value="2030-01-09" class="flagged"/>
+            <div class="field-flag-tag">⚠ Please verify expiry date</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin section (hidden) -->
+    <div id="tab-admin" style="display:none">
+      <div class="group-card">
+        <div class="form-grid form-grid-2">
+          <div class="field">
+            <label>Prefix</label>
+            <select><option>Mr.</option><option>Ms.</option></select>
+          </div>
+          <div class="field"></div>
+          <div class="field">
+            <label>First name <span class="req">*</span></label>
+            <input type="text" value="Sara" class="prefilled"/>
+            <div class="field-prefill-tag">✓ From Emirates ID</div>
+          </div>
+          <div class="field">
+            <label>Last name <span class="req">*</span></label>
+            <input type="text" value="Al Mansoori" class="prefilled"/>
+            <div class="field-prefill-tag">✓ From Emirates ID</div>
+          </div>
+          <div class="field">
+            <label>Mobile number <span class="req">*</span></label>
+            <div class="phone-input">
+              <select><option>🇦🇪 +971</option><option>🇸🇦 +966</option></select>
+              <input type="text" placeholder="55 987 6543"/>
+            </div>
+          </div>
+          <div class="field">
+            <label>Telephone <span class="optional">optional</span></label>
+            <div class="phone-input">
+              <select><option>🇦🇪 +971</option><option>🇸🇦 +966</option></select>
+              <input type="text" placeholder="04 123 4567"/>
+            </div>
+          </div>
+          <div class="field">
+            <label>Nationality</label>
+            <select class="prefilled">
+              <option selected>Emirati</option>
+            </select>
+            <div class="field-prefill-tag">✓ From Emirates ID</div>
+          </div>
+          <div class="field">
+            <label>Date of birth</label>
+            <input type="date" value="1990-03-22" class="prefilled"/>
+            <div class="field-prefill-tag">✓ From Emirates ID</div>
+          </div>
+        </div>
+        <div class="section-divider"><span>Company address</span></div>
+        <div class="form-grid form-grid-2">
+          <div class="field field-full">
+            <label>Street / Building / Area</label>
+            <input type="text" placeholder="e.g. Unit 4B, Al Barsha Business Park, Sheikh Zayed Rd"/>
+          </div>
+          <div class="field">
+            <label>City</label>
+            <input type="text" value="Dubai" class="prefilled"/>
+          </div>
+          <div class="field">
+            <label>Country</label>
+            <select class="prefilled">
+              <option selected>United Arab Emirates</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Postal code <span class="optional">optional</span></label>
+            <input type="text" placeholder="or N/A"/>
+          </div>
+          <div class="field">
+            <label>P.O. Box <span class="optional">optional</span></label>
+            <input type="text" placeholder="or N/A"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bank section (hidden) -->
+    <div id="tab-bank" style="display:none">
+      <div class="group-card">
+        <div class="form-grid form-grid-2">
+          <div class="field field-full">
+            <label>Account holder name <span class="req">*</span></label>
+            <input type="text" value="Al Faisal Real Estate LLC" class="prefilled"/>
+            <div class="field-prefill-tag">✓ From Bank Confirmation Letter</div>
+          </div>
+          <div class="field">
+            <label>Bank account number <span class="req">*</span></label>
+            <input type="text" value="AE07 0331 2345 6789 0123 456" class="prefilled"/>
+            <div class="field-prefill-tag">✓ From Bank Confirmation Letter</div>
+          </div>
+          <div class="field">
+            <label>Bank name <span class="req">*</span></label>
+            <input type="text" value="Emirates NBD" class="prefilled"/>
+            <div class="field-prefill-tag">✓ From Bank Confirmation Letter</div>
+          </div>
+          <div class="field">
+            <label>Bank branch <span class="req">*</span></label>
+            <input type="text" value="Dubai Main Branch" class="prefilled"/>
+            <div class="field-prefill-tag">✓ From Bank Confirmation Letter</div>
+          </div>
+          <div class="field">
+            <label>Bank city</label>
+            <input type="text" value="Dubai" class="prefilled"/>
+          </div>
+          <div class="field">
+            <label>Bank country</label>
+            <select class="prefilled">
+              <option selected>United Arab Emirates</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Currency <span class="req">*</span></label>
+            <select class="prefilled">
+              <option selected>AED</option><option>USD</option><option>GBP</option><option>EUR</option><option>SAR</option>
+            </select>
+            <div class="field-prefill-tag">✓ From Bank Confirmation Letter</div>
+          </div>
+          <div class="field">
+            <label>SWIFT / BIC code <span class="req">*</span></label>
+            <input type="text" value="EBILAEAD" class="prefilled"/>
+            <div class="field-prefill-tag">✓ From Bank Confirmation Letter</div>
+          </div>
+          <div class="field">
+            <label>Transfer / routing code <span class="optional">optional</span></label>
+            <input type="text" placeholder="If applicable"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn btn-secondary" onclick="goStep(3)">← Back</button>
+      <div class="form-actions-right">
+        <button class="btn btn-gold" onclick="goStep(5)">Review & submit →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ STEP 5: Review & Submit ============ -->
+  <div class="step-panel" id="panel-5">
+    <div class="panel-header">
+      <div class="step-badge">Step 5 of 5</div>
+      <h1 class="panel-title">Review & submit</h1>
+      <p class="panel-subtitle">Everything looks complete. Review the summary below and submit for admin approval. You'll receive a confirmation email once reviewed.</p>
+    </div>
+
+    <div class="group-card review-section">
+      <div class="review-section-title">Account</div>
+      <div class="review-row"><span class="review-label">Company name</span><span class="review-value">Al Faisal Real Estate LLC</span></div>
+      <div class="review-row"><span class="review-label">Admin email</span><span class="review-value">admin@alfaisal.ae</span></div>
+      <div class="review-row"><span class="review-label">Trade license number</span><span class="review-value">TL-2024-012345</span></div>
+    </div>
+
+    <div class="group-card review-section">
+      <div class="review-section-title">Company details</div>
+      <div class="review-row"><span class="review-label">Registration</span><span class="review-value">Dubai, United Arab Emirates</span></div>
+      <div class="review-row"><span class="review-label">License type</span><span class="review-value">Real Estate Licensed</span></div>
+      <div class="review-row"><span class="review-label">Trade license</span><span class="review-value">31 Mar 2026 – 02 Apr 2028</span></div>
+      <div class="review-row"><span class="review-label">Brokerage certificate</span><span class="review-value">131131 (exp. 01 Apr 2028)</span></div>
+      <div class="review-row"><span class="review-label">Tax number</span><span class="review-value">131131</span></div>
+      <div class="review-row"><span class="review-label">Destinations</span><span class="review-value">Riyadh, Muscat, London, Dubai, Marbella, Doha</span></div>
+    </div>
+
+    <div class="group-card review-section">
+      <div class="review-section-title">Documents uploaded</div>
+      <div class="review-row"><span class="review-label">Certificate of Incorporation</span><span class="review-value" style="color:var(--success)">✓ Uploaded</span></div>
+      <div class="review-row"><span class="review-label">Brokerage Certificate</span><span class="review-value" style="color:var(--success)">✓ Uploaded</span></div>
+      <div class="review-row"><span class="review-label">Passport / National ID</span><span class="review-value" style="color:var(--success)">✓ Uploaded</span></div>
+      <div class="review-row"><span class="review-label">Emirates ID</span><span class="review-value" style="color:var(--success)">✓ Uploaded</span></div>
+      <div class="review-row"><span class="review-label">VAT Certificate</span><span class="review-value" style="color:var(--success)">✓ Uploaded</span></div>
+      <div class="review-row"><span class="review-label">Bank Confirmation Letter</span><span class="review-value" style="color:var(--success)">✓ Uploaded</span></div>
+    </div>
+
+    <div class="ocr-banner" style="background:#FDF6E8;border-color:#E8C06A">
+      <div class="ocr-icon">ℹ</div>
+      <div class="ocr-text">
+        <h4 style="color:var(--warning)">What happens next?</h4>
+        <p style="color:#8B5E0A">Your data will be sent to our compliance team for review. This typically takes <strong>1–2 business days</strong>. You'll receive an email when your account is activated. You can log in anytime to check your status.</p>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn btn-secondary" onclick="goStep(4)">← Back</button>
+      <div class="form-actions-right">
+        <button class="btn btn-gold" onclick="goStep(6)" style="padding:0 32px">Submit for approval →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SUCCESS ============ -->
+  <div class="step-panel" id="panel-6">
+    <div class="success-screen">
+      <div class="success-icon">✓</div>
+      <h1 class="success-title">Application submitted!</h1>
+      <p class="success-sub">Your registration has been submitted and a lead record has been created in our system. Our team will review your documents and activate your account within 1–2 business days.</p>
+      <div style="display:flex;flex-direction:column;gap:12px;align-items:center">
+        <button class="btn btn-primary" style="min-width:200px">View application status</button>
+        <button class="btn btn-secondary" style="min-width:200px">Return to homepage</button>
+      </div>
+      <div style="margin-top:40px;padding:20px;background:var(--surface-3);border-radius:var(--radius-lg);text-align:left;font-size:13px;color:var(--text-secondary)">
+        <strong style="color:var(--text-primary);display:block;margin-bottom:8px">Reference number</strong>
+        WAS-BRK-2026-04-83721
+      </div>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<script>
+let currentStep=1;
+
+function goStep(n){
+  document.getElementById('panel-'+currentStep).classList.remove('active');
+  document.getElementById('panel-'+n).classList.add('active');
+  
+  const sidebarItems=document.querySelectorAll('.step-item');
+  sidebarItems.forEach(item=>{
+    const s=parseInt(item.dataset.step);
+    item.classList.remove('active','completed');
+    if(s===n)item.classList.add('active');
+    if(s<n)item.classList.add('completed');
+  });
+  
+  document.getElementById('progress').style.width=(n/5*100)+'%';
+  currentStep=n;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function updatePwStrength(val){
+  const bars=[document.getElementById('bar1'),document.getElementById('bar2'),document.getElementById('bar3'),document.getElementById('bar4')];
+  const lbl=document.getElementById('pw-label');
+  const len=val.length;
+  const hasUpper=/[A-Z]/.test(val);
+  const hasNum=/[0-9]/.test(val);
+  const hasSpec=/[^a-zA-Z0-9]/.test(val);
+  const score=(len>=8?1:0)+(len>=12?1:0)+(hasUpper?1:0)+(hasNum?1:0)+(hasSpec?1:0);
+  bars.forEach(b=>b.className='pw-bar');
+  if(len===0){lbl.textContent='Enter a password';return}
+  if(score<=1){bars[0].classList.add('weak');lbl.textContent='Weak'}
+  else if(score<=2){bars[0].classList.add('medium');bars[1].classList.add('medium');lbl.textContent='Fair'}
+  else if(score<=3){bars[0].classList.add('medium');bars[1].classList.add('medium');bars[2].classList.add('medium');lbl.textContent='Good'}
+  else{bars.forEach(b=>b.classList.add('strong'));lbl.textContent='Strong'}
+}
+
+function simulateUpload(el,type){
+  if(el.classList.contains('has-file')){
+    el.classList.remove('has-file');
+    el.querySelector('.upload-hint').textContent=el.dataset.origHint||'';
+    el.querySelector('.upload-icon').textContent=el.dataset.origIcon||'📄';
+    return;
+  }
+  el.dataset.origHint=el.dataset.origHint||el.querySelector('.upload-hint').textContent;
+  el.dataset.origIcon=el.dataset.origIcon||el.querySelector('.upload-icon').textContent;
+  el.classList.add('has-file');
+  el.querySelector('.upload-hint').textContent='Uploaded · Processing...';
+  setTimeout(()=>{
+    if(el.classList.contains('has-file'))
+      el.querySelector('.upload-hint').textContent='✓ Processed · Fields auto-filled';
+  },1200);
+}
+
+function switchTab(tabEl,id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  tabEl.classList.add('active');
+  ['auth','admin','bank'].forEach(t=>{
+    const el=document.getElementById('tab-'+t);
+    if(el)el.style.display=(t===id?'block':'none');
+  });
+}
+
+document.querySelectorAll('.checkbox-item').forEach(item=>{
+  item.addEventListener('click',function(e){
+    if(e.target.tagName==='INPUT')return;
+    const cb=this.querySelector('input[type=checkbox]');
+    cb.checked=!cb.checked;
+    this.classList.toggle('checked',cb.checked);
+  });
+});
+</script>
+</body>
+</html>
